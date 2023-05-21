@@ -2,7 +2,7 @@
 
 - This project provides two RESTful HTTP APIs for creating and verifying an account and password.
 - Most of the functionalities have been implemented, but there are still some issues related to database initialization when using docker-compose to spin up this application.
-- Discusstion and suggestions are welcomed.
+- Discussion and suggestions are welcomed.
 
 ## User Guide: Running the Application with Docker
 

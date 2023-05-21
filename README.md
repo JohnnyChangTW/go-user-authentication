@@ -1,6 +1,8 @@
 # HTTP APIs for Account and Password Management
 
-This project provides two RESTful HTTP APIs for creating and verifying an account and password.
+- This project provides two RESTful HTTP APIs for creating and verifying an account and password.
+
+- Still have some issues related to database initialization when using docker-compose to spin up this application
 
 ## APIs document
 

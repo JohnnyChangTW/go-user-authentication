@@ -1,0 +1,26 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0 
+    # mysql image for M1:
+    # image: arm64v8/mysql:oracle
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: account_db
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+    restart: always
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:

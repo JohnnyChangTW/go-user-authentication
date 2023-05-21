@@ -1,26 +1,35 @@
 version: '3'
 services:
   db:
-    image: mysql:8.0 
     # mysql image for M1:
     # image: arm64v8/mysql:oracle
+    image: mysql:8.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: account_db
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=account_db
     ports:
-      - '3306:3306'
+      - '127.0.0.1:3306:3306'
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - shared
 
   app:
-    build:
-      context: .
+    depends_on:
+      - db
+    build: .
     restart: always
     ports:
       - '8000:8000'
-    depends_on:
-      - db
+    networks:
+      - shared
 
 volumes:
   mysql_data:
+
+
+networks:
+  shared:
+    name: shared

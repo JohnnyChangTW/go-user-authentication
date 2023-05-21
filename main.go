@@ -30,21 +30,56 @@ type VerifyResponse struct {
 	Reason  string `json:"reason,omitempty"`
 }
 
+// Account represents an account entity.
+type Account struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 var db *sql.DB
 
 func main() {
 	var err error
+	// const (
+	// 	UserName string = "root"
+	// 	Password string = "password"
+	// 	Addr     string = "db"
+	// 	Port     int    = 3306
+	// 	Database string = "account_db"
+	// )
+	// conn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", UserName, Password, Addr, Port, Database)
+	// db, err = sql.Open("mysql", conn)
+	// db, err = sql.Open("mysql", "root:password@tcp(docker.for.mac.localhost:3306)/account_db")
 	db, err = sql.Open("mysql", "root:password@tcp(db:3306)/account_db")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
+	// Create the accounts table if it doesn't exist
+	createTable()
+
 	router := gin.Default()
+	fmt.Println("Server started")
 	router.POST("/accounts", createAccountHandler)
 	router.POST("/accounts/verify", verifyAccountHandler)
 
 	log.Fatal(router.Run(":8000"))
+}
+
+// createTable creates the account table if it doesn't exist.
+func createTable() {
+	fmt.Println("Creating account table")
+	query :=
+		`CREATE TABLE IF NOT EXISTS accounts (
+			id INT AUTO_INCREMENT PRIMARY KEY,
+			username VARCHAR(32) NOT NULL,
+			password VARCHAR(32) NOT NULL)`
+	_, err := db.Exec(query)
+	if err != nil {
+		log.Fatalf("Failed to create account table: %v", err)
+	}
 }
 
 func createAccountHandler(c *gin.Context) {
